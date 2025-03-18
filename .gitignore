@@ -34,6 +34,10 @@ license.txt
 # Readme
 readme.html
 
+# 
+!wp-includes/.htaccess
+!contenido/uploads/.htaccess
+
 # Fichero de configuración WordPress
 !wp-config.php
 

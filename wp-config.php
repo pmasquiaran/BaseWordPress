@@ -66,6 +66,16 @@ define( 'PLUGINDIR', '/ruta_carpeta_sitio/contenido/plugins' );
 define( 'WP_PLUGIN_URL', 'https://sitio.dominio/contenido/plugins' );
 define( 'UPLOADS', 'contenido/uploads' );
 
+/* Cookies */
+define( 'TEST_COOKIE', 'wordpress_test_cookie' );
+define( 'COOKIEHASH', 'xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'LOGGED_IN_COOKIE', 'wordpress_logged_in_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'SECURE_AUTH_COOKIE', 'wordpress_logged_in_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'AUTH_COOKIE', 'wordpress_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'PASS_COOKIE', 'wordpresspass_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'USER_COOKIE', 'wordpressuser_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'RECOVERY_MODE_COOKIE', 'wordpress_rec_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+
 /* Content */
 define( 'AUTOSAVE_INTERVAL', 60 );
 define( 'WP_POST_REVISIONS', false );
@@ -98,6 +108,19 @@ define( 'SMTP_FROM', 'usuario.remitente@servidor.dominio' );
 define( 'SMTP_FROM_NAME', 'Texto remitente' );
 define( 'SMTP_DEBUG', 2 ); // Para hacer un debug se necesita setear en 1 o 2
 
+/* Performance */
+//define( 'WP_CACHE', true );
+//define( 'WP_CACHE_KEY_SALT', 'a4217j8tdllpfepaxd:' );
+//define( 'COMPRESS_CSS', true );
+//define( 'COMPRESS_SCRIPTS', true );
+//define( 'CONCATENATE_SCRIPTS', false );
+//define( 'ENFORCE_GZIP', true );
+
+/* Cron */
+define( 'DISABLE_WP_CRON', true );
+define( 'ALTERNATE_WP_CRON', false );
+define( 'WP_CRON_LOCK_TIMEOUT', 60 );
+
 /* FTP Access */
 define( 'FS_METHOD', 'ssh2' );
 define( 'FTP_BASE', '/ruta_carpeta_sitio/' );
@@ -108,9 +131,22 @@ define( 'FTP_PASS', 'password_ftp' );
 define( 'FTP_HOST', 'dominio_ftp' );
 define( 'FTP_SSL', true ); // Sólo en el caso que tengamos SFTP
 
+/* Plugins Must-Use */
+define( 'WPMU_PLUGIN_DIR', '/contenido/imprescindibles' );
+define( 'WPMU_PLUGIN_URL', 'https://sitio.dominio/contenido/imprescindibles' );
+define( 'MUPLUGINDIR', 'contenido/imprescindibles' );
+
+/* Filtering */
+define( 'DISALLOW_UNFILTERED_HTML', false );
+define( 'ALLOW_UNFILTERED_UPLOADS', false );
+
 /* MultiSite */
 define( 'WP_ALLOW_MULTISITE', false );
 define( 'WP_DEFAULT_THEME', 'nombre_tema_base' );
+
+/* File permissions */
+define( 'FS_CHMOD_DIR', ( 0755 & ~ umask() ) );
+define( 'FS_CHMOD_FILE', ( 0644 & ~ umask() ) );
 
 /* Debug */
 define( 'WP_DEBUG', false );
@@ -120,6 +156,10 @@ if ( WP_DEBUG ) {
 }
 define( 'SCRIPT_DEBUG', true );
 define( 'SAVEQUERIES', true );
+
+/* Embed H5P */
+define( 'H5P_EMBED_URL_ALWAYS_AVAILABLE', true );
+define( 'H5P_DEV', false );
 
 /* JWT Authentication */
 define( 'JWT_AUTH_SECRET_KEY', 'palabra_secreta' );
