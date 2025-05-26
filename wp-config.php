@@ -4,8 +4,8 @@
  *
  * Este archivo contiene las siguientes configuraciones: ajustes de MySQL, prefijo de tablas,
  * claves secretas, idioma de WordPress y ABSPATH. Para obtener más información,
- * visita la página del Codex{@link http://codex.wordpress.org/Editing_wp-config.php Editing
- * wp-config.php} . Los ajustes de MySQL te los proporcionará tu proveedor de alojamiento web.
+ * visita la página {@link https://developer.wordpress.org/advanced-administration/wordpress/wp-config/}.
+ * Los ajustes de MySQL te los proporcionará tu proveedor de alojamiento web.
  *
  * This file is used by the wp-config.php creation script during the
  * installation. You don't have to use the web site, you can just copy this file
@@ -67,14 +67,14 @@ define( 'WP_PLUGIN_URL', 'https://sitio.dominio/contenido/plugins' );
 define( 'UPLOADS', 'contenido/uploads' );
 
 /* Cookies */
-define( 'TEST_COOKIE', 'wordpress_test_cookie' );
+define( 'TEST_COOKIE', 'sitio_test_cookie' );
 define( 'COOKIEHASH', 'xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
-define( 'LOGGED_IN_COOKIE', 'wordpress_logged_in_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
-define( 'SECURE_AUTH_COOKIE', 'wordpress_logged_in_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
-define( 'AUTH_COOKIE', 'wordpress_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
-define( 'PASS_COOKIE', 'wordpresspass_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
-define( 'USER_COOKIE', 'wordpressuser_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
-define( 'RECOVERY_MODE_COOKIE', 'wordpress_rec_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'LOGGED_IN_COOKIE', 'sitio_logged_in_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'SECURE_AUTH_COOKIE', 'sitio_logged_in_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'AUTH_COOKIE', 'sitio_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'PASS_COOKIE', 'sitiopass_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'USER_COOKIE', 'sitiouser_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
+define( 'RECOVERY_MODE_COOKIE', 'sitio_rec_xFnSGMFTVR6BpsmAwWDXVNFM2kkKv9PEWYyaywTV79Bh4lQbE4Wc8cFHI6IBzExZ' );
 
 /* Content */
 define( 'AUTOSAVE_INTERVAL', 60 );

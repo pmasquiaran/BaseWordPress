@@ -15,14 +15,14 @@
  * functions.php file. The child theme's functions.php file is included before
  * the parent theme's file, so the child theme functions would be used.
  *
- * @link https://codex.wordpress.org/Theme_Development
- * @link https://codex.wordpress.org/Child_Themes
+ * @link https://developer.wordpress.org/themes/
+ * @link https://developer.wordpress.org/themes/advanced-topics/child-themes/
  *
  * Functions that are not pluggable (not wrapped in function_exists()) are
  * instead attached to a filter or action hook.
  *
  * For more information on hooks, actions, and filters,
- * {@link https://codex.wordpress.org/Plugin_API}
+ * {@link https://developer.wordpress.org/plugins/hooks/}
  * ================================================================================
  */
 
@@ -70,7 +70,7 @@ add_filter( 'x_redirect_by', '__return_false' );
 
 /**
  * @function maki_mime_type()
- * @description función para incluir formato de compresión de imagen webp
+ * @description función para incluir formato de compresión de imagen svg y webp
  * ================================================================================
  */
 add_filter( 'mime_types', 'maki_mime_type' );
@@ -143,6 +143,7 @@ add_action( 'after_setup_theme', 'maki_child_theme_setup' );
 function maki_child_theme_setup(){
     load_child_theme_textdomain( 'text-domain', get_stylesheet_directory() . '/language' );
 }
+
 /**
  * @function maki_limpiar_admin_bar()
  * @description función que elimina elementos del navbar en el backend
@@ -189,6 +190,30 @@ function maki_limpiar_admin_bar(){
 	$wp_admin_bar->remove_menu ( 'feedback' );
 	$wp_admin_bar->remove_menu ( '_options' );
 	$wp_admin_bar->remove_menu ( 'tribe-events' );
+
+}
+
+/**
+ * @function maki_remover_panel()
+ * @description función que restringe el backend sin importar su nivel de acceso
+ * ================================================================================
+ */
+add_action ( 'admin_menu', 'maki_remover_panel' );
+
+function maki_remover_panel(){
+
+	global $menu;
+
+	$usuario_actual = wp_get_current_user();
+
+	if( $usuario_actual->user_login != 'pablo.masquiaran' ):
+		$restricted = array( __( 'Links' ), __( 'Media' ), __( 'Pages' ), __( 'Appearance' ), __( 'Tools' ), __( 'Users' ), __( 'Settings' ), __( 'Comments' ), __( 'Plugins' ) );
+		end ( $menu );
+		while( prev( $menu ) ):
+			$value = explode( ' ', $menu[key( $menu )][0]);
+			if( in_array( $value[0] != NULL ? $value[0] : "" , $restricted ) ) : unset( $menu[key ( $menu )] ); endif;
+		endwhile;
+	endif;
 
 }
 
@@ -287,13 +312,13 @@ function maki_remove_html5_tags(){
 }
 
 /**
- * @function maki_block_rest_api()
+ * @function maki_disable_json_rest_api()
  * @description función para bloquear la API REST de WordPress
  * ================================================================================
  */
-add_action( 'rest_authentication_errors', 'maki_block_rest_api' );
+add_action( 'rest_authentication_errors', 'maki_disable_json_rest_api' );
 
-function maki_block_rest_api( $result ){
+function maki_disable_json_rest_api( $result ){
 
 	if ( ! empty( $result ) )
 		return $result;
@@ -309,42 +334,23 @@ function maki_block_rest_api( $result ){
 }
 
 /**
- * @function maki_disable_json_api()
- * @description función para deshabilitar completamente la API REST de WordPress
- * ================================================================================
- */
-add_action( 'after_setup_theme', 'maki_disable_json_api' );
-
-function maki_disable_json_api(){
-
-	// Filters for WP-API version 1.x
-	add_filter('json_enabled', '__return_false');
-	add_filter('json_jsonp_enabled', '__return_false');
-
-	// Filters for WP-API version 2.x
-	add_filter('rest_enabled', '__return_false');
-	add_filter('rest_jsonp_enabled', '__return_false');
-
-}
-
-/**
- * @function maki_remove_json_api()
+ * @function maki_remove_header_json_api()
  * @description función que elimina metadatos innecesarios del header
  * ================================================================================
  */
-add_action( 'after_setup_theme', 'maki_remove_json_api' );
+add_action( 'after_setup_theme', 'maki_remove_header_json_api' );
 
-function maki_remove_json_api(){
+function maki_remove_header_json_api(){
 
 	// Remove the REST API lines from the HTML header.
 	remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
 	remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
 
+	// Desactiva enlace de la REST API en las cabeceras HTTP (API REST).
+	remove_action('template_redirect', 'rest_output_link_header', 11, 0);
+
 	// Remove the REST API endpoint.
 	remove_action( 'rest_api_init', 'wp_oembed_register_route' );
-
-	// Turn off oEmbed auto discovery.
-	add_filter( 'embed_oembed_discover', '__return_false' );
 
 	// Don't filter oEmbed results.
 	remove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 );
@@ -355,11 +361,11 @@ function maki_remove_json_api(){
 	// Remove oEmbed-specific JavaScript from the front-end and back-end.
 	remove_action( 'wp_head', 'wp_oembed_add_host_js' );
 
-	// Desactiva enlace de la REST API en las cabeceras HTTP (API REST).
-	remove_action('template_redirect', 'rest_output_link_header', 11, 0);
+	// Turn off oEmbed auto discovery.
+	add_filter( 'embed_oembed_discover', '__return_false' );
 
 	// Remove all embeds rewrite rules.
-	add_filter( 'rewrite_rules_array', 'disable_embeds_rewrites' );
+	//add_filter( 'rewrite_rules_array', 'disable_embeds_rewrites' );
 
 }
 
@@ -418,11 +424,29 @@ function maki_cors_http_header(){
 add_action( 'init', 'maki_limpiar_head', 100 );
 
 function maki_limpiar_head(){
+/*
+remove_action('wp_head', 'rsd_link'); // remove really simple discovery link
+remove_action('wp_head', 'wp_generator'); // remove wordpress version
 
+remove_action('wp_head', 'feed_links', 2); // remove rss feed links (make sure you add them in yourself if youre using feedblitz or an rss service)
+remove_action('wp_head', 'feed_links_extra', 3); // removes all extra rss feed links
+
+remove_action('wp_head', 'index_rel_link'); // remove link to index page
+remove_action('wp_head', 'wlwmanifest_link'); // remove wlwmanifest.xml (needed to support windows live writer)
+
+remove_action('wp_head', 'start_post_rel_link', 10, 0); // remove random post link
+remove_action('wp_head', 'parent_post_rel_link', 10, 0); // remove parent post link
+remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0); // remove the next and previous post links
+remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0 );
+      
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
+      
+remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0); // Remove shortlink
+*/
 	remove_action( 'wp_head', 'rsd_link' ); // Removes the RSD link
 	remove_action( 'wp_head', 'wp_generator' ); // Removes the WordPress version i.e. -
 	remove_action( 'wp_head', 'index_rel_link' ); // Removes the index link
-	remove_action( 'wp_head', 'wlwmanifest_link' ); // Removes the wlwmanifest link
 	remove_action( 'wp_head', 'feed_links', 2 ); // Removes links to the general feeds: Post and Comment Feed
 	remove_action( 'wp_head', 'feed_links_extra', 3 ); // Removes the links to the extra feeds such as category feeds
 	remove_action( 'wp_head', 'start_post_rel_link' ); // Removes the start link
@@ -432,12 +456,12 @@ function maki_limpiar_head(){
 	remove_action( 'wp_head', 'adjacent_posts_rel_link' );
 	remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' ); // Removes the relational links for the posts adjacent to the current post
 	remove_action( 'wp_head', 'insert_og_meta' );
-	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 	remove_action( 'wp_head', 'wp_resource_hints', 2 );
 
+	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 	remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
-	remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+	remove_action( 'admin_print_scripts', 'print_emoji_detection_script', 7 );
 	remove_action( 'admin_print_styles', 'print_emoji_styles' );
 
 }
@@ -451,7 +475,7 @@ add_action( 'do_faviconico', 'maki_favicon_remover' );
 
 function maki_favicon_remover(){
 
-	wp_redirect( get_stylesheet_directory_uri() . '/images/ico/favicon.ico' );
+	wp_redirect( get_stylesheet_directory_uri() . '/icons/favicon.ico' );
 	exit;
 
 }
@@ -470,12 +494,12 @@ function maki_web_favicons(){
 	echo '
 		<!-- Área de íconos favoritos :
 		================================================================================ -->
-		<link rel="icon" type="image/png" href="' . get_stylesheet_directory_uri() . '/images/ico/favicon-96x96.png" sizes="96x96">
-		<link rel="icon" type="image/svg+xml" href="' . get_stylesheet_directory_uri() . '/images/ico/favicon.svg">
-		<link rel="shortcut icon" href="' . get_stylesheet_directory_uri() . '/images/ico/favicon.ico">
-		<link rel="apple-touch-icon" sizes="180x180" href="' . get_stylesheet_directory_uri() . '/images/ico/apple-touch-icon.png">
-		<meta name="apple-mobile-web-app-title" content="Simulador de enfermería psiquiátrica">
-		<link rel="manifest" href="' . get_stylesheet_directory_uri() . '/images/ico/site.webmanifest">' . "\n";
+		<link rel="icon" type="image/png" href="' . get_stylesheet_directory_uri() . '/icons/favicon-96x96.png" sizes="96x96">
+		<link rel="icon" type="image/svg+xml" href="' . get_stylesheet_directory_uri() . '/icons/favicon.svg">
+		<link rel="shortcut icon" href="' . get_stylesheet_directory_uri() . '/icons/favicon.ico">
+		<link rel="apple-touch-icon" sizes="180x180" href="' . get_stylesheet_directory_uri() . '/icons/apple-touch-icon.png">
+		<meta name="apple-mobile-web-app-title" content="Título des sitio web">
+		<link rel="manifest" href="' . get_stylesheet_directory_uri() . '/icons/site.webmanifest">' . "\n";
 
 }
 

@@ -43,3 +43,7 @@ readme.html
 
 # Fichero de funciones del tema
 !contenido/themes/TemaBase/functions.php
+
+# Ficheros de estilos del tema
+!contenido/themes/TemaBase/login.css
+!contenido/themes/TemaBase/style.css
