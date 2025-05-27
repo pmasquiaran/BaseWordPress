@@ -271,7 +271,7 @@ AddDefaultCharset UTF-8
 <IfModule mod_rewrite.c>
 	RewriteCond %{REQUEST_METHOD} POST
 	RewriteCond %{REQUEST_URI} (wp-comments-post|wp-login)\.php [NC]
-	RewriteCond %{HTTP_REFERER} !(.*)entrehuevosyquesos.cl [NC,OR]
+	RewriteCond %{HTTP_REFERER} !(.*)sitio.dominio [NC,OR]
 	RewriteCond %{HTTP_USER_AGENT} ^$
 	RewriteRule .* - [L]
 </IfModule>

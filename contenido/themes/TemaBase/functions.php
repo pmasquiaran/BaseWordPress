@@ -252,8 +252,11 @@ function maki_queue_style(){
 
 	wp_deregister_style( 'estilo-a-descartar' );
 
-	wp_enqueue_style( 'estilo-padre', get_template_directory_uri() . '/style.css', array(), null, 'all' );
-	wp_enqueue_style( 'estilo-hijo', get_stylesheet_directory_uri() . '/style.css', array(), null, 'all' );
+	wp_register_style( 'estilo-padre', get_template_directory_uri() . '/style.css', array(), null, 'all' );
+	wp_register_style( 'estilo-hijo', get_stylesheet_directory_uri() . '/style.css', array(), null, 'all' );
+
+	wp_enqueue_style( 'estilo-padre' );
+	wp_enqueue_style( 'estilo-hijo' );
 
 }
 
@@ -266,11 +269,15 @@ add_action( 'wp_enqueue_scripts', 'maki_queue_script', 900 );
 
 function maki_queue_script(){
 
+	wp_dequeue_script( 'comment-reply' );
 	wp_dequeue_script( 'javascript-a-descartar' );
 
+	wp_deregister_script( 'comment-reply' );
 	wp_deregister_script( 'javascript-a-descartar' );
 
-	wp_enqueue_script( 'codigo-javascript', get_stylesheet_directory_uri() . '/js/codigo-javascript.js', array(), '', true );
+	wp_register_script( 'codigo-javascript', get_stylesheet_directory_uri() . '/js/codigo-javascript.js', array(), '', true );
+
+	wp_enqueue_script( 'codigo-javascript' );
 
 }
 
@@ -283,8 +290,37 @@ add_action( 'login_enqueue_scripts', 'maki_custom_login', 100 );
 
 function maki_custom_login(){
 
-	wp_enqueue_style( 'estilo-hijo', get_template_directory_uri() . '/estilo-hijo.css', array(), null, 'all' );
-	wp_enqueue_style( 'estilo-login', get_stylesheet_directory_uri() . '/estilo-login.css', array(), null, 'all' );
+	wp_register_style( 'estilo-padre', get_template_directory_uri() . '/style.css', array(), null, 'all' );
+	wp_register_style( 'estilo-hijo', get_template_directory_uri() . '/style.css', array(), null, 'all' );
+	wp_register_style( 'estilo-login', get_stylesheet_directory_uri() . '/login.css', array(), null, 'all' );
+
+	wp_enqueue_style( 'estilo-padre' );
+	wp_enqueue_style( 'estilo-hijo' );
+	wp_enqueue_style( 'estilo-login' );
+
+}
+
+/**
+ * @function maki_login_glitch_screen()
+ * @description para incorporar un efecto de "glitch" sobre una imagen de fondo
+ * ================================================================================
+ */
+add_action( 'login_header', 'maki_login_glitch_screen' );
+
+function maki_login_glitch_screen() {
+
+	echo '
+		<!-- Área de efecto glich :
+		================================================================================ -->
+		<div class="image-glitch" aria-hidden="true">
+			<ul class="glitch-list">
+				<li class="glitch-item"></li>
+				<li class="glitch-item"></li>
+				<li class="glitch-item"></li>
+				<li class="glitch-item"></li>
+				<li class="glitch-item"></li>
+			</ul>
+		</div>' . "\n";
 
 }
 
